@@ -1,5 +1,5 @@
 
-##   WFGit 1.0.0
+##   WFGit 1.0
 
 is script implementation of a workflow using GIT.
 
