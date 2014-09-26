@@ -1,0 +1,278 @@
+#!/bin/bash
+
+usage()
+{
+	case "$1" in 
+	feature)
+	echo ""
+	;;
+	hotfix)
+	echo ""
+	;;
+	release)
+echo "
+wgit release init releasename
+wgit release commit messages..
+wgit release merge releasename
+"
+	;;
+	init)
+echo "
+wgit init
+	create a repository for wgit workflow management.
+"
+	;;
+	*)
+	echo "
+wgit COMMAND
+where COMMAND is 
+	init
+	release
+	hotfix
+	feature
+"
+	;;
+	esac	
+
+}
+
+
+
+
+mainFeature()
+{
+	BRANCHS=$(git branch 2>/dev/null | sed 's/^\* /  /')
+	BRANCH=$(git branch | grep "^*" | sed 's/^\* //')
+	FILETOCOMMIT=$(git diff HEAD  --name-only)	
+	case "$BRANCH" in 
+	develop)
+		resume=no
+		for b in $BRANCHS
+		do
+			if [[ x$b == x$1 ]]
+			then
+				resume=yes
+			fi
+		done
+		if [[ x$resume == xyes ]]
+		then
+			git checkout $1
+		else
+			if [[ x$1 == x ]]
+			then
+				echo inserire un nome
+			else
+				git checkout -b feature-$1 develop
+			fi
+		fi
+		
+	;;
+	feature-*)
+		if [[ x$FILETOCOMMIT == x ]]
+		then
+			if [[ x$1 == x ]]
+			then
+				git checkout develop 
+				git merge --no-ff $BRANCH
+				if [[ x$? != x0 ]]
+				then
+					git mergetool -y
+					git commit -a 
+				fi
+				git branch -d $BRANCH
+				git push origin develop
+			elif [[ x$1 == x--pause ]]
+			then
+				git checkout develop
+			fi
+		else
+			echo "Commit to be done"
+		fi
+	;;
+	*)
+		echo "incorrect branch ... " $BRANCH
+	;;
+	esac
+}
+
+
+mainRelease()
+{
+	BRANCH=$(git branch | grep "^*" | sed 's/^\* //')
+	FILETOCOMMIT=$(git diff HEAD  --name-only)	
+	case "$BRANCH" in 
+	develop)
+		if [[ x$1 == x ]]
+		then
+			echo inserire un nome
+		else
+			git checkout -b release-$1 develop
+		fi
+	;;
+	release-*)
+		if [[ x$FILETOCOMMIT == x ]]
+		then
+			git checkout master
+			git merge --no-ff $BRANCH
+			if [[ x$? != x0 ]]
+			then
+				git mergetool -y
+				git commit -a 
+			fi
+			git tag -a ${BRANCH#*-}
+			git checkout develop
+			git merge --no-ff $BRANCH
+			git branch -d $BRANCH
+			git push origin master
+			git push origin develop
+		else
+			echo "Commit to be done"
+		fi
+	;;
+	*)
+		echo "incorrect branch ... " $BRANCH
+	;;
+	esac
+}
+
+
+mainHotfix()
+{
+	BRANCH=$(git branch | grep "^*" | sed 's/^\* //')
+	FILETOCOMMIT=$(git diff HEAD  --name-only)	
+	case "$BRANCH" in 
+	develop)
+		if [[ x$1 == x ]]
+		then
+			echo inserire un nome
+		else
+			git checkout -b hotfix-$1 master
+		fi
+	;;
+	hotfix-*)
+		if [[ x$FILETOCOMMIT == x ]]
+		then
+			git checkout master
+			git merge --no-ff $BRANCH
+			git tag -a ${BRANCH#*-}
+			if [[ x$? != x0 ]]
+			then
+				git mergetool -y
+				git commit -a 
+			fi
+			git checkout develop
+			git merge --no-ff $BRANCH
+			git branch -d $BRANCH
+		else
+			echo "Commit to be done"
+		fi
+	;;
+	*)
+		echo "incorrect branch ... " $BRANCH
+	;;
+	esac
+}
+
+mainInit()
+{
+	git init 
+	touch .gitignore
+	git add .gitignore
+	git commit -a -m "Initial Version"
+	git branch develop
+	git checkout develop
+}
+
+mainConvert()
+{
+	BRANCHS=$(git branch 2>/dev/null | sed 's/^\* /  /')
+	develop=true
+	master=true
+	for b in $BRANCHS 
+	do
+		echo $b
+		case $b in
+		develop)
+			develop=false
+		;;
+		master)
+			master=false
+		;;
+		esac
+	done
+	$master && git branch master
+	$develop && git checkout -b develop master
+	git checkout develop
+}
+main()
+{
+	BRANCH=$(git branch 2>/dev/null | grep "^*" | sed 's/^\* //')
+	case "$1" in
+	init)
+		if [[ ! -e .git ]]
+		then
+			shift
+			mainInit "$@"
+		else
+			echo "Git already initializzed."
+		fi
+	;;
+	feature)
+		shift
+		mainFeature "$@"
+	;;
+	hotfix)
+		shift
+		mainHotfix "$@"
+	;;
+	release)
+		shift
+		mainRelease "$@"
+	;;
+	commit)
+		BRANCH=$(git branch | grep "^*" | sed 's/^\* //')
+		if [[ x$BRANCH != xdevelop ]]
+		then
+ 			git "$@"
+		else
+			echo "wgit commit not valid in develop branch"
+		fi
+	;;
+	add|status|log)
+		git "$@"
+	;;
+	commandlist)
+		case "x$2" in
+		xwgit|x)
+			echo "add commit status log release hotfix feature init convert"
+		;;
+		xlog)
+			git branch 2>/dev/null | sed 's/\*//' 
+		;;
+		xcommit)
+			echo " -a -m  `git diff HEAD  --name-only`"
+		;;
+		xadd)
+			git ls-files --others --exclude-standard
+		;;
+		xfeature)
+			echo --pause `git branch 2>/dev/null | sed 's/\*// '| grep feature-`
+		;;
+		esac
+	;;
+	convert)
+		mainConvert
+	;;
+	"")
+		git status
+	;;
+	*)
+	usage
+	;;
+	esac
+}
+
+
+main "$@"
+
+

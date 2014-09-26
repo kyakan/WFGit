@@ -1,0 +1,18 @@
+
+_wgit()
+{
+	local cur prev opts
+	COMPREPLY=()
+	cur="${COMP_WORDS[COMP_CWORD]}"
+	prev="${COMP_WORDS[COMP_CWORD-1]}"
+	if [ $COMP_CWORD -gt 1 ] 
+	then 
+		addopt=`wgit commandlist ${COMP_WORDS[1]}`
+	fi 
+	opts="$addopt `wgit commandlist $prev`"
+	COMPREPLY=( $(compgen -W "${opts} " -- ${cur}) )
+	return 0
+}
+
+complete -F _wgit wgit
+
