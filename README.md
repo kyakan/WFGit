@@ -1,5 +1,5 @@
 
-##                WFGit 1.0.0
+##   WFGit 1.0.0
 
 is script implementation of a workflow using GIT.
 
@@ -29,33 +29,33 @@ At the end the hotfix will be merged with master and develop.
 ##   USAGE
 WFGit is managed by the wgit command.
 
-wgit [COMMAND] [OPTIONS]
+	wgit [COMMAND] [OPTIONS]
 
 The all command are:
-   wgit init        Init a new repository, with only .gitignore
-                    file, and making the first commit with the
-                    two main branch develop and master
+	wgit init        Init a new repository, with only .gitignore
+		         file, and making the first commit with the
+		         two main branch develop and master
 
-   wgit add         Permit to add some file in the repository
-                    tipically used with feature/hotfix/release
-                    temporary branch.
-                   
-   wgit convert     Permit to convert a standard git repositori to 
-                    a new wgit repository.
+	wgit add         Permit to add some file in the repository
+		         tipically used with feature/hotfix/release
+		         temporary branch.
+		   
+	wgit convert     Permit to convert a standard git repositori to 
+		         a new wgit repository.
 
-   wgit log         Permit to show the log commits from the current
-                    branch.
+	wgit log         Permit to show the log commits from the current
+		         branch.
 
-   wgit commit      Usable only in the temporary branch, permit to save
-                    modification to file.
+	wgit commit      Usable only in the temporary branch, permit to save
+		         modification to file.
 
-   wgit status      Default beaviour of wgit, it show the state of repository.
+	wgit status      Default beaviour of wgit, it show the state of repository.
 
-   wgit feature     Manage creating/saving a new feature, or keep it in pause.
+	wgit feature     Manage creating/saving a new feature, or keep it in pause.
 
-   wgit release     Manage creating/saving a new release.
+	wgit release     Manage creating/saving a new release.
 
-   wgit hotfix      Manage creating/saving a new hotfix.
+	wgit hotfix      Manage creating/saving a new hotfix.
 
 
 ### Examples of common tasks
