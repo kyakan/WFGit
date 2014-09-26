@@ -61,39 +61,39 @@ The all command are:
 ### Examples of common tasks
 
 
-wgit init #create new repository
- ... #edit/create file and directoyr
-wgit feature basic # create a task activity for a new feature called 'basic'
-wgit add file1 file2 dir1/dir2/file3 dir3/dir4 #adding some directory/file
-wgit commit file1 -m "text comment" # commit file1 with comment inline
-wgit commit -a  # commit all file uncommitted and open editor for adding the comment
-wgit feature # close feature basic and merge all in develop branch
-wgit feature experiment # add a feature called experiment
-... # modify commit ..
-wgit feature --pause # stop the experiment feature, go back to the last development
-wgit feature newexp # newexp feature created
-... # write code...
-wgit feature # close the newexp feature, and merge it in develop
-wgit feature experiment # open the paused feature experiment
-... # coding..
-wgit feature  # close and merge, if there are some conflict ask to resolve
+	wgit init #create new repository
+	 ... #edit/create file and directoyr
+	wgit feature basic # create a task activity for a new feature called 'basic'
+	wgit add file1 file2 dir1/dir2/file3 dir3/dir4 #adding some directory/file
+	wgit commit file1 -m "text comment" # commit file1 with comment inline
+	wgit commit -a  # commit all file uncommitted and open editor for adding the comment
+	wgit feature # close feature basic and merge all in develop branch
+	wgit feature experiment # add a feature called experiment
+	... # modify commit ..
+	wgit feature --pause # stop the experiment feature, go back to the last development
+	wgit feature newexp # newexp feature created
+	... # write code...
+	wgit feature # close the newexp feature, and merge it in develop
+	wgit feature experiment # open the paused feature experiment
+	... # coding..
+	wgit feature  # close and merge, if there are some conflict ask to resolve
 
-...
+	...
 
-wgit release 1.2 # open release branch 1.2
-... #coding..
-wgit commit -a -m "ready for release 1.2"
-wgit release # close and save in develop and master, creating tag 1.2
+	wgit release 1.2 # open release branch 1.2
+	... #coding..
+	wgit commit -a -m "ready for release 1.2"
+	wgit release # close and save in develop and master, creating tag 1.2
 
-...
+	...
 
-wgit hotfix bugs # create a hotfix for some bugs...
-...#coding..
-wgit commit -a -m "fix bug"
-wgit hotfix # save fix in master and develop.
+	wgit hotfix bugs # create a hotfix for some bugs...
+	...#coding..
+	wgit commit -a -m "fix bug"
+	wgit hotfix # save fix in master and develop.
 
 
-gitk --all # to see al repository
+	gitk --all # to see al repository
 
 
 ##   INSTALL
