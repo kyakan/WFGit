@@ -76,11 +76,18 @@ mainFeature()
 				git merge --no-ff $BRANCH
 				if [[ x$? != x0 ]]
 				then
-					git mergetool -y
+					git mergetool -y && \
 					git commit -a 
+					
 				fi
-				git branch -d $BRANCH
-				git push origin develop
+				if [[ x$? == x0 ]]
+				then
+					git branch -d $BRANCH
+					git push origin develop
+				else
+					git merge --abort
+					git checkout $BRANCH
+				fi
 			elif [[ x$1 == x--pause ]]
 			then
 				git checkout develop
