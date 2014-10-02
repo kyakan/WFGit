@@ -261,14 +261,18 @@ main()
 			echo "wgit commit not valid in develop branch"
 		fi
 	;;
-	add|status)
+	add|status|diff)
 		git "$@"
 	;;
-	log2)
-		git `echo "$@" | sed 's/log2/log/'` --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n''          %C(white)%s%C(reset) %C(dim white)- %an%C(reset)' 
+	push)
+		git push origin master
+		git push origin develop
 	;;
 	log)
-		git "$@" --graph --abbrev-commit --decorate --date=relative --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)' 
+		git `echo "$@" | sed 's/log2/log/'` --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n''          %C(white)%s%C(reset) %C(dim white)- %an%C(reset)' 
+	;;
+	log2)
+		git `echo "$@" | sed 's/log2/log/'` --graph --abbrev-commit --decorate --date=relative --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)' 
 	;;
 	xlog)
 		gitk `echo "$@" | sed 's/xlog//'`
@@ -276,7 +280,7 @@ main()
 	commandlist)
 		case "x$2" in
 		xwgit|x)
-			echo "add commit status log release hotfix feature init convert log2 xlog "
+			echo "add commit status log release hotfix feature init convert log2 xlog push diff"
 		;;
 		xlog|xlog2|xxlog)
 			echo --all `git branch 2>/dev/null | sed 's/\*//' `
