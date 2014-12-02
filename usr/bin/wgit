@@ -277,10 +277,18 @@ main()
 	xlog)
 		gitk `echo "$@" | sed 's/xlog//'`
 	;;
+	rebase)
+		if [[ x$BRANCH == xfeature-* ]]
+		then
+			git rebase develop $BRANCH
+		else
+			echo "Error: rebase can be done only in feature!"
+		fi
+	;;
 	commandlist)
 		case "x$2" in
 		xwgit|x)
-			echo "add commit status log release hotfix feature init convert log2 xlog push diff"
+			echo "add commit status log release hotfix feature init convert log2 xlog push diff rebase"
 		;;
 		xlog|xlog2|xxlog)
 			echo --all `git branch 2>/dev/null | sed 's/\*//' `
