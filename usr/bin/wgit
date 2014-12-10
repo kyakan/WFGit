@@ -24,12 +24,20 @@ wgit init
 	;;
 	*)
 	echo "
-wgit COMMAND
-where COMMAND is 
-	init
-	release
-	hotfix
-	feature
+wgit COMMANDA ARGS
+where commonly used COMMANDs are:
+	init	Create a wgit repository
+	release	Create a release temporary branch
+	hotfix	Create a hotfix temporary branch
+	feature	Create a feature temporary branch
+	log	Show the commits log (command line)
+	log2	Show the commits log (command line)
+	xlog	Show the commits log (X needed)
+	add	Add file contents to the current temporary branch
+	convert	Fix gap between a normal git repo and a wgit repo
+	commit	Commit in the current temporary branch
+	status	Show the working tree status
+	
 "
 	;;
 	esac	
@@ -84,6 +92,10 @@ mainFeature()
 				then
 					git branch -d $BRANCH
 					git push origin develop
+					if [[ x$? != 0 ]]
+					then 
+						echo "git push origin develop needed!!"
+					fi
 				else
 					git merge --abort
 					git checkout $BRANCH
@@ -249,16 +261,37 @@ main()
 			echo "wgit commit not valid in develop branch"
 		fi
 	;;
-	add|status|log)
+	add|status|diff)
 		git "$@"
+	;;
+	push)
+		git push origin master
+		git push origin develop
+	;;
+	log)
+		git `echo "$@" | sed 's/log2/log/'` --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n''          %C(white)%s%C(reset) %C(dim white)- %an%C(reset)' 
+	;;
+	log2)
+		git `echo "$@" | sed 's/log2/log/'` --graph --abbrev-commit --decorate --date=relative --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)' 
+	;;
+	xlog)
+		gitk `echo "$@" | sed 's/xlog//'`
+	;;
+	rebase)
+		if [[ x$BRANCH == xfeature-* ]]
+		then
+			git rebase develop $BRANCH
+		else
+			echo "Error: rebase can be done only in feature!"
+		fi
 	;;
 	commandlist)
 		case "x$2" in
 		xwgit|x)
-			echo "add commit status log release hotfix feature init convert"
+			echo "add commit status log release hotfix feature init convert log2 xlog push diff rebase"
 		;;
-		xlog)
-			git branch 2>/dev/null | sed 's/\*//' 
+		xlog|xlog2|xxlog)
+			echo --all `git branch 2>/dev/null | sed 's/\*//' `
 		;;
 		xcommit)
 			echo " -a -m  `git diff HEAD  --name-only`"
