@@ -27,6 +27,7 @@ At the end the hotfix will be merged with master and develop.
 
 
 ##   USAGE
+
 WFGit is managed by the wgit command.
 
 	wgit [COMMAND] [OPTIONS]
