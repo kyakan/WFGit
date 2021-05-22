@@ -125,6 +125,7 @@ mainRelease()
 			git branch -d $BRANCH
 			git push origin master
 			git push origin develop
+			git push --tags
 		else
 			echo "Commit to be done"
 		fi
@@ -163,6 +164,9 @@ mainHotfix()
 			git checkout develop
 			git merge --no-ff $BRANCH
 			git branch -d $BRANCH
+			git push origin master
+			git push origin develop
+			git push --tags
 		else
 			echo "Commit to be done"
 		fi
@@ -257,6 +261,9 @@ main()
 		;;
 		xfeature)
 			echo --pause `git branch 2>/dev/null | sed 's/\*// '| grep feature-`
+		;;
+		xhotfix)
+			echo `git tag --list`
 		;;
 		esac
 	;;
