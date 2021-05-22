@@ -8,11 +8,11 @@ is script implementation of a workflow using GIT.
 The basic workflow as two branch where we put develop stage
 and master (read as release) stage.
 
-Every modificatio was made using a separate temporary branch
+Every modification was made using a separate temporary branch
 called feature-NAME, where design the new feature to add.
 When finished a feature can be put in the develop branch.
 
-Every new release will be opened a new temporary branch
+Every new release open a new temporary branch
 called release-XX, this release branch will be used for
 adding the last modification before release, at the end
 the branch will be merge in the develop and master branch
