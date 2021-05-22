@@ -250,7 +250,7 @@ main()
 			git branch 2>/dev/null | sed 's/\*//' 
 		;;
 		xcommit)
-			git diff HEAD  --name-only
+			echo " -a -m  `git diff HEAD  --name-only`"
 		;;
 		xadd)
 			git ls-files --others --exclude-standard
