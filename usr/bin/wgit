@@ -123,6 +123,8 @@ mainRelease()
 			git checkout develop
 			git merge --no-ff $BRANCH
 			git branch -d $BRANCH
+			git push origin master
+			git push origin develop
 		else
 			echo "Commit to be done"
 		fi
